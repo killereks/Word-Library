@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -9,7 +9,7 @@ public class WordLibrary {
 	private HashSet<string> _words;
 	private string[] _wordsArray;
 
-	Random rand = new Random();
+	public static Random rand = new Random();
 
 	/// <summary>
 	/// Creates a new word library from a file.
@@ -721,5 +721,36 @@ public class WordResults {
 		}
 
 		return new WordResults(result.ToArray());
+	}
+
+	/// <summary>
+	/// Returns random words.
+	/// </summary>
+	/// <param name="amount">Amount of words to return.</param>
+	/// <returns></returns>
+	public WordResults Random(int amount){
+		List<string> result = new List<string>();
+		List<string> words = new List<string>(_words);
+		
+		for (int i = 0; i < amount; i++){
+			if (words.Count == 0){
+				break;
+			}
+			
+			int index = WordLibrary.rand.Next(words.Count);
+			result.Add(words[index]);
+			words.RemoveAt(index);
+		}
+
+		return new WordResults(result.ToArray());
+	}
+	
+	/// <summary>
+	/// Save current set of words to a file.
+	/// </summary>
+	/// <param name="path"></param>
+	public void Save(string path){
+		string text = string.Join(Environment.NewLine, _words);
+		File.WriteAllText(path, text);
 	}
 }
